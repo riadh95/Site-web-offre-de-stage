@@ -1,0 +1,110 @@
+<?php
+  session_start();
+?>
+<?php include '../../phpLogic/connection.php';?>
+<?php
+  if ($_SESSION['who']=='employee') {
+     $intern_id=$_GET['internid'];
+     $query="SELECT * FROM `internlist` WHERE `intern_id`='$intern_id'";
+     $result = $mysqli->query($query);
+     $row=$result->fetch_array(MYSQLI_ASSOC);
+  }else {
+    echo "<script>alert('please login as employee');</script>";
+        setcookie("page_content", "index.php", time() + (86400), "/");
+        echo "<script>
+            setTimeout(function(){
+               window.location.href = '/internshala_project/index.php';
+            }, 50);
+            </script>";
+            exit;
+  }
+
+?>
+
+<style media="screen">
+  .rounded{
+     border-bottom-right-radius: 0rem !important;
+     border-bottom-left-radius: 0rem !important;
+  }
+
+  .downround {
+    border-bottom-left-radius: 0.25rem !important;
+    border-bottom-right-radius: 0.25rem !important;
+  }
+  .card {
+    width: 95%!important;
+    box-shadow: 0px 0px 0px;
+  }
+  .my-3 {
+    margin-bottom: 0rem !important;
+  }
+  .contain {
+    border: 1px solid #6f42c1;
+
+  }
+  .foot {
+    width: 100%;
+    padding: 5px;
+  }
+  .small{
+    color: papayawhip !important;
+  }
+</style>
+<div class="navbar fixed-top bg-white p box-shadow" >
+        <div class="row nav-scroller">
+           <div class="col-2 text-left nav-li" onclick="loadDoc('content','public/webPages/employer_dashboard_home.php')">
+            <strong> Tableau de bord </strong>
+           </div>
+           <div class="col-2 text-left nav-li" onclick="loadDoc('content','public/webPages/employer_dashboard_applicants.php')">
+            Voir les offres 
+           </div>
+           <div class="col-2 text-left nav-li" onclick="loadDoc('content','public/webPages/employer_dashboard_addintern.php')">
+           Ajouter un nouveau stage 
+           </div>
+           <div class="col-2 text-left nav-li" onclick="loadDoc('content','public/webPages/student_recherche.php')">
+           Rechercher un étudiant 
+           </div>
+           <div class="col-2 text-left nav-li" onclick="loadDoc('content','public/webPages/delegue_recherche.php')">
+           Rechercher un délégué 
+           </div>
+           <div class="col-2 text-left nav-li" onclick="loadDoc('content','public/webPages/employee_recherche.php')">
+           Rechercher un pilote 
+           </div>
+        </div>
+    </div>
+<div class="padding">
+
+</div>
+<div class="container">
+  <div class="container body">
+    <form class="form-signin" method="post" action="phpLogic/createInternship.php?action=update&id=<?php echo $intern_id; ?>">
+      <h1 class="h3 mb-3 font-weight-normal text-center">Modifier l'offre stage</h1>
+
+      <label for="internName" class="text-left">Nom du stage</label>
+      <input type="text" value="<?php echo $row['intern_topic']; ?>" name="internName" id="internName" class="form-control" placeholder="Ex : Développement Web "  required  autofocus><br>
+
+      <label for="internLocation" class="text-left">Lieu<label>
+      <input type="text" value="<?php echo $row['intern_location']; ?>" name="internLocation" id="internLocation" class="form-control" placeholder="Ex : Paris" required  autofocus><br>
+
+      <label for="internDuration" class="text-left">Durée</label>
+      <input type="text" value="<?php echo $row['intern_duration']; ?>" name="internDuration" id="internDuration" class="form-control" placeholder="Ex : 6 mois" required >
+
+      <label for="internStipend" class="text-left">Le Salaire</label>
+      <input type="text" value="<?php echo $row['stipend']; ?>" name="internStipend" id="internStipend" class="form-control" placeholder="(inr only) ex: 1000" required >
+
+      <label for="applyBy" class="text-left">Dernière date de candidature</label>
+      <input type="date" value="<?php echo $row['apply_by']; ?>" name="applyBy" id="applyBy" class="form-control" placeholder="ex:24-05-2018" required >
+
+      <div class="row">
+        <div class="col-12">
+          <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit" value="Enregistrer les modifications" style="margin-top:10px; font-size: 15px">
+        </div>
+      </div>
+      <!-- <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div> -->
+    </form>
+</div>
+</div>
